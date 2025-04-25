@@ -2,6 +2,7 @@
 
 import TimeDisplay from '@/components/TimeDisplay';
 import HomeComponent from '@/components/home';
+import Rewards from '@/components/rewards';
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <main>
         <TimeDisplay />
         <HomeComponent />
+        <Rewards />
       </main>
     </div>
   );
