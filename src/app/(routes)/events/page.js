@@ -21,7 +21,7 @@ const formatDate = (timestamp) => {
 };
 
 export default function Events() {
-  const { student, logout } = useStudent();
+  const { student } = useStudent(); // Remove logout from here
   const router = useRouter();
   const [events, eventsLoading, eventsError] = useCollection(
     collection(db, "events"),
@@ -46,12 +46,6 @@ export default function Events() {
               <h1 className="text-3xl font-bold text-gray-900">Events</h1>
               <p className="text-gray-600">Welcome, {student?.firstName}</p>
             </div>
-            <button 
-              onClick={logout}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
-            >
-              Logout
-            </button>
           </div>
           
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

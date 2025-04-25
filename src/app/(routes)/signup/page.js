@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '../../../lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 
 export default function StudentAuth() {
@@ -19,7 +19,7 @@ export default function StudentAuth() {
   useEffect(() => {
     const student = localStorage.getItem('studentUser');
     if (student) {
-      router.push('/events');
+      router.push('/'); // Changed from '/events' to '/'
     }
   }, [router]);
 
@@ -47,7 +47,7 @@ export default function StudentAuth() {
         };
 
         localStorage.setItem('studentUser', JSON.stringify(studentData));
-        router.push('/events');
+        router.push('/'); // Changed from '/events' to '/'
       } else {
         // Signup flow
         if (!querySnapshot.empty) {
@@ -66,7 +66,7 @@ export default function StudentAuth() {
           ...formData
         };
         localStorage.setItem('studentUser', JSON.stringify(studentData));
-        router.push('/events');
+        router.push('/'); // Changed from '/events' to '/'
       }
     } catch (error) {
       console.error('Authentication error:', error);
