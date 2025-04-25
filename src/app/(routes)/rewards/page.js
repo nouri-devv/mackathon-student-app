@@ -98,29 +98,7 @@ export default function Rewards() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <div className="w-48 bg-white shadow-sm p-4">
-        <h1 className="text-xl font-semibold mb-8">Student Portal</h1>
-        <div className="space-y-4">
-          <Link href="/" className="flex items-center text-gray-600 hover:text-gray-900">
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Home
-          </Link>
-          <Link href="/events" className="flex items-center text-gray-600 hover:text-gray-900">
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Events
-          </Link>
-          <Link href="/rewards" className="flex items-center text-indigo-600 font-medium">
-            <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-            </svg>
-            Rewards
-          </Link>
-        </div>
-      </div>
+      <Sidebar />
       <div className="flex-1">
         <div className="max-w-4xl mx-auto p-8">
           <div className="flex items-center justify-between mb-8">
@@ -203,9 +181,8 @@ export default function Rewards() {
               )}
             </div>
           </div>
+        </div>
       </div>
     </div>
   );
-    </div>
-  );
-};
+}
