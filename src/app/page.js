@@ -95,7 +95,7 @@ export default function Home() {
               href="/events"
               className="mt-4 inline-block text-indigo-600 hover:text-indigo-800"
             >
-              View all events →
+              View all events
             </Link>
           </div>
         </div>
