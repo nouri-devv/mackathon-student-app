@@ -23,13 +23,6 @@ export default function Sidebar() {
           Events
         </Link>
         <Link 
-          href="/profile"
-          className="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
-        >
-          <UserIcon className="h-5 w-5 mr-3" />
-          Profile
-        </Link>
-        <Link 
           href="/rewards"
           className="flex items-center px-6 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
         >
