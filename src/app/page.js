@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStudent } from '../hooks/useStudent';
 import { collection } from 'firebase/firestore';
@@ -8,7 +8,7 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../lib/firebase';
 import Link from 'next/link';
 import Sidebar from '../components/Sidebar';
-import { StarIcon } from '@heroicons/react/24/outline';
+import { StarIcon, Bars3Icon as MenuIcon } from '@heroicons/react/24/outline';
 import CreditPoints from '@/components/CreditPoint';
 
 export default function Home() {
@@ -18,6 +18,7 @@ export default function Home() {
     collection(db, "events"),
     {}
   );
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Calculate total points from registered events
   const calculateTotalPoints = () => {
@@ -48,10 +49,30 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <Sidebar />
-      
+      {/* Mobile menu button */}
+      <button
+        type="button"
+        className="md:hidden p-2 fixed top-4 left-4 z-20 rounded-md bg-white shadow-sm"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <MenuIcon className="h-6 w-6 text-gray-600" />
+      </button>
+
+      {/* Mobile sidebar */}
+      <div className={`md:hidden fixed inset-0 z-10 transform ${
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      } transition-transform duration-300 ease-in-out`}>
+        <div className="absolute inset-0 bg-gray-600 opacity-75" onClick={() => setIsSidebarOpen(false)} />
+        <Sidebar />
+      </div>
+
+      {/* Desktop sidebar */}
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
+
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 md:p-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900">
@@ -62,6 +83,23 @@ export default function Home() {
               <span className="text-indigo-600 font-medium">
                 {<CreditPoints />} Total Points
               </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-gray-500 text-sm mb-2">Total Events Attended</h3>
+              <p className="text-2xl font-bold text-gray-900">
+                {events?.docs.filter(doc => doc.data().attendees?.includes(student?.id)).length || 0}
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-gray-500 text-sm mb-2">Available Credits</h3>
+              <p className="text-2xl font-bold text-indigo-600"><CreditPoints /></p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="text-gray-500 text-sm mb-2">Rewards Redeemed</h3>
+              <p className="text-2xl font-bold text-gray-900">0</p>
             </div>
           </div>
 
@@ -98,6 +136,51 @@ export default function Home() {
             >
               View all events
             </Link>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Recommended for You
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {events?.docs
+                .filter(doc => !doc.data().attendees?.includes(student?.id))
+                .slice(0, 2)
+                .map((doc) => {
+                  const event = doc.data();
+                  return (
+                    <div 
+                      key={doc.id}
+                      className="border rounded-lg p-4 hover:border-indigo-500 transition-colors cursor-pointer"
+                      onClick={() => router.push(`/events/${doc.id}`)}
+                    >
+                      <h3 className="font-medium text-gray-900 mb-2">{event.title}</h3>
+                      <p className="text-gray-500 text-sm mb-3 line-clamp-2">{event.description}</p>
+                      <div className="flex items-center text-indigo-600">
+                        <StarIcon className="h-4 w-4 mr-1" />
+                        <span className="text-sm font-medium">{event.creditPoints || 0} Points</span>
+                      </div>
+                    </div>
+                  );
+              })}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg p-6 text-white cursor-pointer hover:shadow-lg transition-shadow">
+              <h3 className="text-lg font-semibold mb-2">Browse Events</h3>
+              <p className="text-indigo-100 mb-4">Discover upcoming events and earn credits</p>
+              <Link href="/events" className="text-sm text-white hover:underline">
+                View All Events →
+              </Link>
+            </div>
+            <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white cursor-pointer hover:shadow-lg transition-shadow">
+              <h3 className="text-lg font-semibold mb-2">Redeem Rewards</h3>
+              <p className="text-purple-100 mb-4">Use your credits to claim exciting rewards</p>
+              <Link href="/rewards" className="text-sm text-white hover:underline">
+                View Rewards →
+              </Link>
+            </div>
           </div>
         </div>
       </div>
