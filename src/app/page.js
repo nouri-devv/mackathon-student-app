@@ -9,6 +9,7 @@ import { db } from '../lib/firebase';
 import Link from 'next/link';
 import Sidebar from '../components/Sidebar';
 import { StarIcon } from '@heroicons/react/24/outline';
+import CreditPoints from '@/components/CreditPoint';
 
 export default function Home() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function Home() {
             <div className="flex items-center bg-indigo-50 px-4 py-2 rounded-full">
               <StarIcon className="h-5 w-5 text-indigo-600 mr-2" />
               <span className="text-indigo-600 font-medium">
-                {calculateTotalPoints()} Total Points
+                {<CreditPoints />} Total Points
               </span>
             </div>
           </div>

@@ -1,14 +1,14 @@
 'use client';
-
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStudent } from '../../../hooks/useStudent';
 import { collection } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../../../lib/firebase';
-import { StarIcon, TrophyIcon } from '@heroicons/react/24/outline';
+import { StarIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Sidebar from '../../../components/Sidebar';
+import CreditPoints from '@/components/CreditPoint';
 
 export default function Rewards() {
   const router = useRouter();
@@ -18,11 +18,10 @@ export default function Rewards() {
     {}
   );
 
-  // Calculate total points and build event history
-  const calculateRewards = () => {
-    if (!events?.docs || !student) return { total: 0, history: [] };
-    
-    const history = events.docs
+  // Build event history
+  const getEventHistory = () => {
+    if (!events?.docs || !student) return [];
+    return events.docs
       .filter(doc => doc.data().attendees?.includes(student.id))
       .map(doc => {
         const event = doc.data();
@@ -32,10 +31,6 @@ export default function Rewards() {
           date: new Date(event.date?.seconds * 1000).toLocaleDateString()
         };
       });
-
-    const total = history.reduce((sum, event) => sum + event.points, 0);
-    
-    return { total, history };
   };
 
   if (loading || eventsLoading) {
@@ -46,7 +41,7 @@ export default function Rewards() {
     );
   }
 
-  const { total, history } = calculateRewards();
+  const history = getEventHistory();
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -55,34 +50,27 @@ export default function Rewards() {
         <div className="max-w-4xl mx-auto p-8">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Rewards</h1>
-            <Link
-              href="/"
-              className="text-gray-600 hover:text-gray-900"
-            >
-              Back to Home
-            </Link>
           </div>
-
+          
           {/* Total Points Card */}
           <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-medium text-gray-700">Total Points Earned</h2>
-                <p className="text-3xl font-bold text-indigo-600 mt-2">{total} Points</p>
-              </div>
-              <div className="bg-indigo-100 p-3 rounded-full">
-                <TrophyIcon className="h-8 w-8 text-indigo-600" />
+                <div className="text-3xl font-bold text-indigo-600 mt-2">
+                  <CreditPoints />
+                </div>
               </div>
             </div>
           </div>
-
+          
           {/* Event History */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Event History</h2>
             <div className="space-y-4">
               {history.length > 0 ? (
                 history.map((event, index) => (
-                  <div 
+                  <div
                     key={index}
                     className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
                   >
